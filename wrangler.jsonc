@@ -50,7 +50,8 @@
   ],
   "vars": {
     "PAYLOAD_PUBLIC_SERVER_URL": "https://hivconnect-backend.shuffle-seo.workers.dev",
-    "DEPLOY_HOOK_URL": "https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/3e240bd9-fb8e-4972-b69a-32436151cfba"
+    "DEPLOY_HOOK_URL": "https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/3e240bd9-fb8e-4972-b69a-32436151cfba",
+    "PAYLOAD_SECRET": "N3DHalBhL4HWguvVag6xbyEugcS/Ovstd/PmQCymkPA="
   },
 
   // Staging environment - deploy with: CLOUDFLARE_ENV=staging pnpm run deploy
