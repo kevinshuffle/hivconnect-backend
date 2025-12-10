@@ -17,6 +17,7 @@ import { PDFLibrary } from './collections/PDFLibrary'
 import { Tags } from './collections/Tags'
 import { FAQs } from './collections/FAQs'
 import { Pages } from './collections/Pages'
+import { MembershipApplications } from './collections/MembershipApplications'
 import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
@@ -40,7 +41,7 @@ export default buildConfig({
       titleSuffix: '- HIV Connect Central NJ',
     },
   },
-  collections: [Users, Providers, Resources, Blog, PDFLibrary, Tags, FAQs, Pages, Media],
+  collections: [Users, Providers, Resources, Blog, PDFLibrary, Tags, FAQs, Pages, MembershipApplications, Media],
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
