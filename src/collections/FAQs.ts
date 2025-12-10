@@ -1,12 +1,12 @@
 import { CollectionConfig } from 'payload';
 import { afterChangeHook, afterDeleteHook } from '../hooks/triggerFrontendRebuild';
 
-export const Resources: CollectionConfig = {
-  slug: 'resources',
+export const FAQs: CollectionConfig = {
+  slug: 'faqs',
   admin: {
-    useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'language', 'status'],
-    description: 'Downloadable resources and external links',
+    useAsTitle: 'question',
+    defaultColumns: ['question', 'category', 'order', 'status'],
+    description: 'Frequently Asked Questions organized by category',
   },
   hooks: {
     afterChange: [afterChangeHook],
@@ -14,7 +14,7 @@ export const Resources: CollectionConfig = {
   },
   access: {
     read: ({ req: { user } }) => {
-      // Published resources are public
+      // Published FAQs are public
       if (user) return true;
       return {
         status: { equals: 'published' },
@@ -26,9 +26,12 @@ export const Resources: CollectionConfig = {
   },
   fields: [
     {
-      name: 'title',
+      name: 'question',
       type: 'text',
       required: true,
+      admin: {
+        description: 'The question to be answered',
+      },
     },
     {
       name: 'slug',
@@ -36,13 +39,13 @@ export const Resources: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
-        description: 'URL-friendly version of the title',
+        description: 'URL-friendly version of the question (auto-generated)',
       },
       hooks: {
         beforeValidate: [
           ({ value, data }) => {
-            if (data?.title && !value) {
-              return data.title
+            if (data?.question && !value) {
+              return data.question
                 .toLowerCase()
                 .replace(/[^a-z0-9]+/g, '-')
                 .replace(/(^-|-$)/g, '');
@@ -53,54 +56,27 @@ export const Resources: CollectionConfig = {
       },
     },
     {
-      name: 'description',
+      name: 'answer',
       type: 'richText',
       required: true,
+      admin: {
+        description: 'Detailed answer to the question (supports rich text formatting)',
+      },
     },
     {
       name: 'category',
       type: 'select',
       required: true,
       options: [
+        { label: 'General', value: 'general' },
+        { label: 'Services', value: 'services' },
+        { label: 'Planning Council', value: 'planning-council' },
+        { label: 'Resources', value: 'resources' },
         { label: 'Testing', value: 'testing' },
         { label: 'Treatment', value: 'treatment' },
-        { label: 'Support', value: 'support' },
-        { label: 'Prevention', value: 'prevention' },
-        { label: 'Legal', value: 'legal' },
-        { label: 'Financial', value: 'financial' },
-        { label: 'Housing', value: 'housing' },
-        { label: 'Other', value: 'other' },
-      ],
-    },
-    {
-      name: 'pdfFile',
-      type: 'upload',
-      relationTo: 'media',
-      label: 'PDF File (optional)',
-      admin: {
-        description: 'Upload a PDF file (will be stored in Cloudflare R2)',
-      },
-    },
-    {
-      name: 'externalLink',
-      type: 'text',
-      label: 'External Link (optional)',
-      admin: {
-        description: 'Link to external resource (if no PDF)',
-      },
-    },
-    {
-      name: 'linkType',
-      type: 'select',
-      required: true,
-      defaultValue: 'internal_pdf',
-      options: [
-        { label: 'Internal PDF/Document', value: 'internal_pdf' },
-        { label: 'External Link/Website', value: 'external_link' },
       ],
       admin: {
-        description: 'Type of resource - internal PDF or external website',
-        position: 'sidebar',
+        description: 'Category for organizing FAQs',
       },
     },
     {
@@ -108,6 +84,19 @@ export const Resources: CollectionConfig = {
       type: 'relationship',
       relationTo: 'tags',
       hasMany: true,
+      admin: {
+        description: 'Optional tags for additional filtering',
+      },
+    },
+    {
+      name: 'order',
+      type: 'number',
+      required: true,
+      defaultValue: 0,
+      admin: {
+        description: 'Display order (lower numbers appear first)',
+        step: 1,
+      },
     },
     {
       name: 'language',
@@ -119,21 +108,9 @@ export const Resources: CollectionConfig = {
         { label: 'Spanish', value: 'spanish' },
         { label: 'Both', value: 'both' },
       ],
-    },
-    {
-      name: 'featured',
-      type: 'checkbox',
-      label: 'Featured Resource',
-      defaultValue: false,
       admin: {
-        description: 'Show this resource prominently on the resources page',
+        description: 'Language version of this FAQ',
       },
-    },
-    {
-      name: 'publishedDate',
-      type: 'date',
-      required: true,
-      defaultValue: () => new Date().toISOString(),
     },
     {
       name: 'status',
@@ -145,6 +122,14 @@ export const Resources: CollectionConfig = {
         { label: 'Published', value: 'published' },
         { label: 'Archived', value: 'archived' },
       ],
+      admin: {
+        position: 'sidebar',
+        description: 'Publication status',
+      },
     },
   ],
+  // Enable versions for content history
+  versions: {
+    drafts: true,
+  },
 };
