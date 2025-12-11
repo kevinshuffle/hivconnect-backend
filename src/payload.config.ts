@@ -18,6 +18,7 @@ import { Tags } from './collections/Tags'
 import { FAQs } from './collections/FAQs'
 import { Pages } from './collections/Pages'
 import { MembershipApplications } from './collections/MembershipApplications'
+import { Events } from './collections/Events'
 import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
@@ -41,7 +42,7 @@ export default buildConfig({
       titleSuffix: '- HIV Connect Central NJ',
     },
   },
-  collections: [Users, Providers, Resources, Blog, PDFLibrary, Tags, FAQs, Pages, MembershipApplications, Media],
+  collections: [Users, Providers, Resources, Blog, PDFLibrary, Tags, FAQs, Pages, MembershipApplications, Events, Media],
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
@@ -53,14 +54,14 @@ export default buildConfig({
     process.env.CORS_ORIGINS?.split(',') || [
       'http://localhost:4321',
       'https://hivconnectcnj.org',
-      'https://staging.hivconnectcnj.org',
+      'https://*.hivconnect-frontend.pages.dev', // Cloudflare Pages preview deployments
     ],
   ].flat(),
   csrf: [
     process.env.CORS_ORIGINS?.split(',') || [
       'http://localhost:4321',
       'https://hivconnectcnj.org',
-      'https://staging.hivconnectcnj.org',
+      'https://*.hivconnect-frontend.pages.dev', // Cloudflare Pages preview deployments
     ],
   ].flat(),
   typescript: {
